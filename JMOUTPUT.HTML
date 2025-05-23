@@ -1,0 +1,886 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Discover Bukidnon</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        /* Custom CSS for animations and effects */
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        
+        @keyframes slideUp {
+            from { 
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to { 
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        .fade-in {
+            animation: fadeIn 1s ease-in-out;
+        }
+        
+        .slide-up {
+            animation: slideUp 0.8s ease-out;
+        }
+        
+        .input-focus:focus {
+            box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.2);
+            border-color: #4f46e5;
+        }
+        
+        .card-hover:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+        }
+        
+        .nav-link {
+            position: relative;
+        }
+        
+        .nav-link:after {
+            content: '';
+            position: absolute;
+            width: 0;
+            height: 2px;
+            bottom: 0;
+            left: 0;
+            background-color: #4f46e5;
+            transition: width 0.3s ease;
+        }
+        
+        .nav-link:hover:after {
+            width: 100%;
+        }
+        
+        .hero-section {
+            background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), 
+                        /* Replace with actual Bukidnon hero image */
+                        url(' wallpaper.jpg');
+            background-size: cover;
+            background-position: center;
+        }
+        
+        /* Scroll animations */
+        [data-scroll] {
+            opacity: 0;
+            transition: opacity 0.6s, transform 0.6s;
+        }
+        
+        [data-scroll="fadeIn"] {
+            transform: translateY(30px);
+        }
+        
+        [data-scroll="slideLeft"] {
+            transform: translateX(-30px);
+        }
+        
+        [data-scroll="slideRight"] {
+            transform: translateX(30px);
+        }
+        
+        [data-scroll].is-visible {
+            opacity: 1;
+            transform: translate(0);
+        }
+    </style>
+</head>
+<body class="font-sans bg-gray-50">
+    <!-- Login/Register Page (Landing Page) -->
+    <div id="auth-page" class="min-h-screen flex items-center justify-center bg-gradient-to-br from-green-50 to-blue-50">
+        <div class="w-full max-w-md p-8 space-y-8 bg-white rounded-xl shadow-xl fade-in">
+            <div class="text-center">
+                <!-- Bukidnon Logo Placeholder - Replace src with actual logo URL -->
+                <img id="bukidnon-logo" src="logo.jpg" alt="Bukidnon Logo" class="mx-auto h-20 w-auto">
+                <h2 class="mt-6 text-3xl font-extrabold text-gray-900">
+                    Discover Bukidnon
+                </h2>
+                <p class="mt-2 text-sm text-gray-600">
+                    Explore the beauty and culture of Bukidnon
+                </p>
+            </div>
+            
+            <div class="flex rounded-md shadow-sm mb-6">
+                <button id="login-tab" class="flex-1 py-2 px-4 text-sm font-medium rounded-l-md bg-indigo-600 text-white">
+                    Login
+                </button>
+                <button id="register-tab" class="flex-1 py-2 px-4 text-sm font-medium rounded-r-md bg-gray-200 text-gray-700 hover:bg-gray-300">
+                    Register
+                </button>
+            </div>
+            
+            <!-- Login Form -->
+            <form id="login-form" class="space-y-6">
+                <div class="rounded-md shadow-sm space-y-4">
+                    <div>
+                        <label for="login-username" class="block text-sm font-medium text-gray-700">Username</label>
+                        <input id="login-username" name="username" type="text" required 
+                            class="mt-1 appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 input-focus focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
+                    </div>
+                    <div>
+                        <label for="login-password" class="block text-sm font-medium text-gray-700">Password</label>
+                        <input id="login-password" name="password" type="password" required 
+                            class="mt-1 appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 input-focus focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
+                    </div>
+                </div>
+                
+                <div class="flex items-center justify-between">
+                    <div class="flex items-center">
+                        <input id="remember-me" name="remember-me" type="checkbox" class="h-4 w-4 text-indigo-600 focus:ring-indigo-500 border-gray-300 rounded">
+                        <label for="remember-me" class="ml-2 block text-sm text-gray-900">
+                            Remember me
+                        </label>
+                    </div>
+                    
+                    <div class="text-sm">
+                        <a href="#" class="font-medium text-indigo-600 hover:text-indigo-500">
+                            Forgot your password?
+                        </a>
+                    </div>
+                </div>
+                
+                <div>
+                    <button type="submit" class="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition duration-150 ease-in-out">
+                        Sign in
+                    </button>
+                </div>
+            </form>
+            
+            <!-- Register Form (Hidden by default) -->
+            <form id="register-form" class="space-y-6 hidden">
+                <div class="rounded-md shadow-sm space-y-4">
+                    <div>
+                        <label for="register-username" class="block text-sm font-medium text-gray-700">Username</label>
+                        <input id="register-username" name="username" type="text" required 
+                            class="mt-1 appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 input-focus focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
+                    </div>
+                    <div>
+                        <label for="register-password" class="block text-sm font-medium text-gray-700">Password</label>
+                        <input id="register-password" name="password" type="password" required 
+                            class="mt-1 appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 input-focus focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
+                    </div>
+                    <div>
+                        <label for="confirm-password" class="block text-sm font-medium text-gray-700">Confirm Password</label>
+                        <input id="confirm-password" name="confirm-password" type="password" required 
+                            class="mt-1 appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 input-focus focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
+                    </div>
+                </div>
+                
+                <div class="flex items-center">
+                    <input id="terms" name="terms" type="checkbox" class="h-4 w-4 text-indigo-600 focus:ring-indigo-500 border-gray-300 rounded" required>
+                    <label for="terms" class="ml-2 block text-sm text-gray-900">
+                        I agree to the <a href="#" class="text-indigo-600 hover:text-indigo-500">Terms and Conditions</a>
+                    </label>
+                </div>
+                
+                <div>
+                    <button type="submit" class="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition duration-150 ease-in-out">
+                        Register
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+    
+    <!-- Main Website Content (Hidden by default) -->
+    <div id="main-content" class="hidden">
+        <!-- Navigation Bar -->
+        <nav class="bg-white shadow-lg sticky top-0 z-50">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="flex justify-between h-16">
+                    <div class="flex">
+                        <div class="flex-shrink-0 flex items-center">
+                            <!-- Bukidnon Logo Placeholder - Replace src with actual logo URL -->
+                            <img class="h-10 w-auto" src="logo.jpg" alt="Bukidnon Logo">
+                        </div>
+                        <div class="hidden sm:ml-6 sm:flex sm:space-x-8">
+                            <a href="#home" class="nav-link border-indigo-500 text-gray-900 inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium">
+                                Home
+                            </a>
+                            <a href="#about" class="nav-link border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700 inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium">
+                                About Bukidnon
+                            </a>
+                            <a href="#attractions" class="nav-link border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700 inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium">
+                                Tourist Attractions
+                            </a>
+                            <a href="#festivals" class="nav-link border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700 inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium">
+                                Festivals
+                            </a>
+                            <a href="#food" class="nav-link border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700 inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium">
+                                Food & Culture
+                            </a>
+                            <a href="#contact" class="nav-link border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700 inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium">
+                                Contact
+                            </a>
+                        </div>
+                    </div>
+                    <div class="hidden sm:ml-6 sm:flex sm:items-center">
+                        <button id="logout-btn" class="bg-indigo-600 hover:bg-indigo-700 text-white px-4 py-2 rounded-md text-sm font-medium transition duration-150 ease-in-out">
+                            Logout
+                        </button>
+                    </div>
+                    <div class="-mr-2 flex items-center sm:hidden">
+                        <button id="mobile-menu-btn" type="button" class="inline-flex items-center justify-center p-2 rounded-md text-gray-400 hover:text-gray-500 hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-indigo-500" aria-controls="mobile-menu" aria-expanded="false">
+                            <span class="sr-only">Open main menu</span>
+                            <svg class="block h-6 w-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+                            </svg>
+                            <svg class="hidden h-6 w-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                            </svg>
+                        </button>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Mobile menu, show/hide based on menu state. -->
+            <div id="mobile-menu" class="sm:hidden hidden">
+                <div class="pt-2 pb-3 space-y-1">
+                    <a href="#home" class="bg-indigo-50 border-indigo-500 text-indigo-700 block pl-3 pr-4 py-2 border-l-4 text-base font-medium">Home</a>
+                    <a href="#about" class="border-transparent text-gray-500 hover:bg-gray-50 hover:border-gray-300 hover:text-gray-700 block pl-3 pr-4 py-2 border-l-4 text-base font-medium">About Bukidnon</a>
+                    <a href="#attractions" class="border-transparent text-gray-500 hover:bg-gray-50 hover:border-gray-300 hover:text-gray-700 block pl-3 pr-4 py-2 border-l-4 text-base font-medium">Tourist Attractions</a>
+                    <a href="#festivals" class="border-transparent text-gray-500 hover:bg-gray-50 hover:border-gray-300 hover:text-gray-700 block pl-3 pr-4 py-2 border-l-4 text-base font-medium">Festivals</a>
+                    <a href="#food" class="border-transparent text-gray-500 hover:bg-gray-50 hover:border-gray-300 hover:text-gray-700 block pl-3 pr-4 py-2 border-l-4 text-base font-medium">Food & Culture</a>
+                    <a href="#contact" class="border-transparent text-gray-500 hover:bg-gray-50 hover:border-gray-300 hover:text-gray-700 block pl-3 pr-4 py-2 border-l-4 text-base font-medium">Contact</a>
+                    <div class="border-transparent text-gray-500 hover:bg-gray-50 hover:border-gray-300 hover:text-gray-700 block pl-3 pr-4 py-2 border-l-4 text-base font-medium">
+                        <button id="mobile-logout-btn" class="text-left w-full">Logout</button>
+                    </div>
+                </div>
+            </div>
+        </nav>
+        
+        <!-- Hero Section -->
+        <section id="home" class="hero-section relative flex items-center justify-center h-screen text-white">
+            <div class="text-center px-4 sm:px-6 lg:px-8" data-scroll="fadeIn">
+                <h1 class="text-4xl md:text-6xl font-bold mb-6 slide-up">Welcome to Bukidnon</h1>
+                <p class="text-xl md:text-2xl mb-8 max-w-3xl mx-auto slide-up">The Land of the Golden Sunrise</p>
+                <a href="#about" class="inline-block bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-3 px-6 rounded-full transition duration-300 ease-in-out transform hover:scale-105 slide-up">
+                    Explore More
+                </a>
+            </div>
+            <div class="absolute bottom-10 left-0 right-0 text-center">
+                <a href="#about" class="text-white animate-bounce inline-block">
+                    <i class="fas fa-chevron-down text-2xl"></i>
+                </a>
+            </div>
+        </section>
+        
+        <!-- About Bukidnon Section -->
+        <section id="about" class="py-20 bg-white">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="text-center mb-16" data-scroll="fadeIn">
+                    <h2 class="text-3xl font-extrabold text-gray-900 sm:text-4xl">
+                        About Bukidnon
+                    </h2>
+                    <div class="mt-4 max-w-2xl mx-auto text-xl text-gray-500">
+                        Discover the rich culture and breathtaking landscapes of Bukidnon
+                    </div>
+                </div>
+                
+                <div class="grid md:grid-cols-2 gap-12 items-center">
+                    <div data-scroll="slideLeft">
+                        <!-- Replace with actual Bukidnon landscape image -->
+                        <img src="https://images.unsplash.com/photo-1605000797499-95a51c5269ae?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1471&q=80" 
+                             alt="Bukidnon Landscape" class="rounded-xl shadow-lg w-full h-auto card-hover transition duration-300">
+                    </div>
+                    <div data-scroll="slideRight">
+                        <h3 class="text-2xl font-bold text-gray-900 mb-4">The Highland Paradise</h3>
+                        <p class="text-gray-600 mb-6">
+                            Bukidnon is a landlocked province in the Philippines located in the Northern Mindanao region. 
+                            Known as the "Highland Paradise," it boasts cool climate, vast agricultural lands, and stunning 
+                            mountain ranges. The province is home to diverse ethnic groups and offers a unique blend of 
+                            culture and nature.
+                        </p>
+                        <div class="grid grid-cols-2 gap-4">
+                            <div class="flex items-start">
+                                <div class="flex-shrink-0 h-10 w-10 rounded-full bg-indigo-100 flex items-center justify-center text-indigo-600">
+                                    <i class="fas fa-mountain"></i>
+                                </div>
+                                <div class="ml-3">
+                                    <h4 class="text-sm font-medium text-gray-900">Highlands</h4>
+                                    <p class="text-xs text-gray-500">Cool climate & scenic views</p>
+                                </div>
+                            </div>
+                            <div class="flex items-start">
+                                <div class="flex-shrink-0 h-10 w-10 rounded-full bg-indigo-100 flex items-center justify-center text-indigo-600">
+                                    <i class="fas fa-leaf"></i>
+                                </div>
+                                <div class="ml-3">
+                                    <h4 class="text-sm font-medium text-gray-900">Agriculture</h4>
+                                    <p class="text-xs text-gray-500">Pineapple capital of the Philippines</p>
+                                </div>
+                            </div>
+                            <div class="flex items-start">
+                                <div class="flex-shrink-0 h-10 w-10 rounded-full bg-indigo-100 flex items-center justify-center text-indigo-600">
+                                    <i class="fas fa-users"></i>
+                                </div>
+                                <div class="ml-3">
+                                    <h4 class="text-sm font-medium text-gray-900">Culture</h4>
+                                    <p class="text-xs text-gray-500">Rich indigenous heritage</p>
+                                </div>
+                            </div>
+                            <div class="flex items-start">
+                                <div class="flex-shrink-0 h-10 w-10 rounded-full bg-indigo-100 flex items-center justify-center text-indigo-600">
+                                    <i class="fas fa-water"></i>
+                                </div>
+                                <div class="ml-3">
+                                    <h4 class="text-sm font-medium text-gray-900">Waterfalls</h4>
+                                    <p class="text-xs text-gray-500">Numerous majestic falls</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+        <!-- Tourist Attractions Section -->
+        <section id="attractions" class="py-20 bg-gray-50">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="text-center mb-16" data-scroll="fadeIn">
+                    <h2 class="text-3xl font-extrabold text-gray-900 sm:text-4xl">
+                        Tourist Attractions
+                    </h2>
+                    <div class="mt-4 max-w-2xl mx-auto text-xl text-gray-500">
+                        Explore the natural wonders of Bukidnon
+                    </div>
+                </div>
+                
+                <div class="grid md:grid-cols-3 gap-8">
+                    <!-- Attraction 1 -->
+                    <div class="bg-white rounded-xl shadow-md overflow-hidden card-hover transition duration-300" data-scroll="fadeIn">
+                        <!-- Replace with actual attraction image -->
+                        <img class="h-48 w-full object-cover" src="hero.jpg" alt="Dahilayan Adventure Park">
+                        <div class="p-6">
+                            <h3 class="text-xl font-semibold text-gray-900 mb-2">Dahilayan Adventure Park</h3>
+                            <p class="text-gray-600 mb-4">
+                                Experience the longest dual zipline in Asia with breathtaking views of the mountains.
+                            </p>
+                            <div class="flex items-center text-sm text-gray-500">
+                                <i class="fas fa-map-marker-alt mr-2"></i>
+                                Manolo Fortich, Bukidnon
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Attraction 2 -->
+                    <div class="bg-white rounded-xl shadow-md overflow-hidden card-hover transition duration-300" data-scroll="fadeIn">
+                        <!-- Replace with actual attraction image -->
+                        <img class="h-48 w-full object-cover" src="apo.jpg" alt="Mount Kitanglad">
+                        <div class="p-6">
+                            <h3 class="text-xl font-semibold text-gray-900 mb-2">Mount Kitanglad</h3>
+                            <p class="text-gray-600 mb-4">
+                                One of the highest peaks in the Philippines, perfect for hiking and nature tripping.
+                            </p>
+                            <div class="flex items-center text-sm text-gray-500">
+                                <i class="fas fa-map-marker-alt mr-2"></i>
+                                Central Bukidnon
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Attraction 3 -->
+                    <div class="bg-white rounded-xl shadow-md overflow-hidden card-hover transition duration-300" data-scroll="fadeIn">
+                        <!-- Replace with actual attraction image -->
+                        <img class="h-48 w-full object-cover" src="pineapple.jpg" alt="Del Monte Pineapple Plantation">
+                        <div class="p-6">
+                            <h3 class="text-xl font-semibold text-gray-900 mb-2">Del Monte Pineapple Plantation</h3>
+                            <p class="text-gray-600 mb-4">
+                                Vast fields of pineapple plants stretching as far as the eye can see.
+                            </p>
+                            <div class="flex items-center text-sm text-gray-500">
+                                <i class="fas fa-map-marker-alt mr-2"></i>
+                                Manolo Fortich, Bukidnon
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="mt-12 text-center" data-scroll="fadeIn">
+                    <a href="#" class="inline-flex items-center px-6 py-3 border border-transparent text-base font-medium rounded-md shadow-sm text-white bg-indigo-600 hover:bg-indigo-700 transition duration-150 ease-in-out">
+                        View All Attractions
+                        <i class="fas fa-arrow-right ml-3"></i>
+                    </a>
+                </div>
+            </div>
+        </section>
+        
+        <!-- Festivals Section -->
+        <section id="festivals" class="py-20 bg-white">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="text-center mb-16" data-scroll="fadeIn">
+                    <h2 class="text-3xl font-extrabold text-gray-900 sm:text-4xl">
+                        Festivals
+                    </h2>
+                    <div class="mt-4 max-w-2xl mx-auto text-xl text-gray-500">
+                        Celebrate the vibrant culture of Bukidnon
+                    </div>
+                </div>
+                
+                <div class="grid md:grid-cols-2 gap-12 items-center">
+                    <div data-scroll="slideLeft">
+                        <div class="relative">
+                            <!-- Replace with actual festival image -->
+                            <img src="festi.jpg" 
+                                 alt="Kaamulan Festival" class="rounded-xl shadow-lg w-full h-auto card-hover transition duration-300">
+                            <div class="absolute -bottom-4 -right-4 bg-indigo-600 text-white px-6 py-3 rounded-lg shadow-lg">
+                                <div class="text-sm">Annual Celebration</div>
+                                <div class="font-bold">February - March</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div data-scroll="slideRight">
+                        <h3 class="text-2xl font-bold text-gray-900 mb-4">Kaamulan Festival</h3>
+                        <p class="text-gray-600 mb-6">
+                            Kaamulan is an ethnic cultural festival held annually in Malaybalay City, Bukidnon. 
+                            It celebrates the customs and traditions of the seven tribal groups that originally 
+                            inhabited the Bukidnon region.
+                        </p>
+                        <ul class="space-y-3">
+                            <li class="flex items-start">
+                                <div class="flex-shrink-0 h-6 w-6 rounded-full bg-indigo-100 flex items-center justify-center text-indigo-600">
+                                    <i class="fas fa-check text-xs"></i>
+                                </div>
+                                <p class="ml-3 text-gray-600">Traditional dances and music performances</p>
+                            </li>
+                            <li class="flex items-start">
+                                <div class="flex-shrink-0 h-6 w-6 rounded-full bg-indigo-100 flex items-center justify-center text-indigo-600">
+                                    <i class="fas fa-check text-xs"></i>
+                                </div>
+                                <p class="ml-3 text-gray-600">Indigenous sports competitions</p>
+                            </li>
+                            <li class="flex items-start">
+                                <div class="flex-shrink-0 h-6 w-6 rounded-full bg-indigo-100 flex items-center justify-center text-indigo-600">
+                                    <i class="fas fa-check text-xs"></i>
+                                </div>
+                                <p class="ml-3 text-gray-600">Ethnic craft exhibits and food fairs</p>
+                            </li>
+                        </ul>
+                        <div class="mt-8">
+                            <a href="#" class="inline-flex items-center text-indigo-600 hover:text-indigo-500">
+                                Learn more about the festival
+                                <i class="fas fa-chevron-right ml-2"></i>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+        <!-- Food & Culture Section -->
+        <section id="food" class="py-20 bg-gray-50">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="text-center mb-16" data-scroll="fadeIn">
+                    <h2 class="text-3xl font-extrabold text-gray-900 sm:text-4xl">
+                        Food & Culture
+                    </h2>
+                    <div class="mt-4 max-w-2xl mx-auto text-xl text-gray-500">
+                        Taste the flavors and experience the traditions of Bukidnon
+                    </div>
+                </div>
+                
+                <div class="grid md:grid-cols-3 gap-8">
+                    <!-- Food 1 -->
+                    <div class="bg-white rounded-xl shadow-md overflow-hidden card-hover transition duration-300" data-scroll="fadeIn">
+                        <!-- Replace with actual food image -->
+                        <img class="h-48 w-full object-cover" src="product.jpg" alt="Pineapple Products">
+                        <div class="p-6">
+                            <h3 class="text-xl font-semibold text-gray-900 mb-2">Pineapple Products</h3>
+                            <p class="text-gray-600 mb-4">
+                                Bukidnon is known as the pineapple capital of the Philippines, producing sweet and juicy pineapples.
+                            </p>
+                            <div class="flex justify-between items-center">
+                                <span class="text-sm font-medium text-gray-500">Fresh • Juice • Jam</span>
+                                <span class="text-sm font-medium text-indigo-600">Must Try</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Food 2 -->
+                    <div class="bg-white rounded-xl shadow-md overflow-hidden card-hover transition duration-300" data-scroll="fadeIn">
+                        <!-- Replace with actual food image -->
+                        <img class="h-48 w-full object-cover" src="food.jpg" alt="Binaki">
+                        <div class="p-6">
+                            <h3 class="text-xl font-semibold text-gray-900 mb-2">Binaki</h3>
+                            <p class="text-gray-600 mb-4">
+                                A sweet corn cake wrapped in banana leaves, a popular Bukidnon delicacy.
+                            </p>
+                            <div class="flex justify-between items-center">
+                                <span class="text-sm font-medium text-gray-500">Sweet • Corn • Cake</span>
+                                <span class="text-sm font-medium text-indigo-600">Local Favorite</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Culture -->
+                    <div class="bg-white rounded-xl shadow-md overflow-hidden card-hover transition duration-300" data-scroll="fadeIn">
+                        <!-- Replace with actual culture image -->
+                        <img class="h-48 w-full object-cover" src="culture.jpg" alt="Indigenous Culture">
+                        <div class="p-6">
+                            <h3 class="text-xl font-semibold text-gray-900 mb-2">Indigenous Culture</h3>
+                            <p class="text-gray-600 mb-4">
+                                Bukidnon is home to seven indigenous tribes, each with unique traditions and crafts.
+                            </p>
+                            <div class="flex justify-between items-center">
+                                <span class="text-sm font-medium text-gray-500">Tribes • Traditions • Crafts</span>
+                                <span class="text-sm font-medium text-indigo-600">Cultural Heritage</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+        <!-- Contact Section -->
+        <section id="contact" class="py-20 bg-white">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="text-center mb-16" data-scroll="fadeIn">
+                    <h2 class="text-3xl font-extrabold text-gray-900 sm:text-4xl">
+                        Contact Us
+                    </h2>
+                    <div class="mt-4 max-w-2xl mx-auto text-xl text-gray-500">
+                        Get in touch for more information about Bukidnon
+                    </div>
+                </div>
+                
+                <div class="grid md:grid-cols-2 gap-12">
+                    <div data-scroll="slideLeft">
+                        <h3 class="text-2xl font-bold text-gray-900 mb-6">Send us a message</h3>
+                        <form class="space-y-6">
+                            <div>
+                                <label for="name" class="block text-sm font-medium text-gray-700">Name</label>
+                                <input type="text" id="name" name="name" class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500">
+                            </div>
+                            <div>
+                                <label for="email" class="block text-sm font-medium text-gray-700">Email</label>
+                                <input type="email" id="email" name="email" class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500">
+                            </div>
+                            <div>
+                                <label for="message" class="block text-sm font-medium text-gray-700">Message</label>
+                                <textarea id="message" name="message" rows="4" class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"></textarea>
+                            </div>
+                            <div>
+                                <button type="submit" class="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition duration-150 ease-in-out">
+                                    Send Message
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                    <div data-scroll="slideRight">
+                        <h3 class="text-2xl font-bold text-gray-900 mb-6">Contact Information</h3>
+                        <div class="space-y-6">
+                            <div class="flex">
+                                <div class="flex-shrink-0 h-10 w-10 rounded-full bg-indigo-100 flex items-center justify-center text-indigo-600">
+                                    <i class="fas fa-map-marker-alt"></i>
+                                </div>
+                                <div class="ml-4">
+                                    <h4 class="text-sm font-medium text-gray-900">Address</h4>
+                                    <p class="text-sm text-gray-500">Provincial Capitol, Malaybalay City, Bukidnon, Philippines</p>
+                                </div>
+                            </div>
+                            <div class="flex">
+                                <div class="flex-shrink-0 h-10 w-10 rounded-full bg-indigo-100 flex items-center justify-center text-indigo-600">
+                                    <i class="fas fa-phone-alt"></i>
+                                </div>
+                                <div class="ml-4">
+                                    <h4 class="text-sm font-medium text-gray-900">Phone</h4>
+                                    <p class="text-sm text-gray-500">+63 (088) 813-3636</p>
+                                </div>
+                            </div>
+                            <div class="flex">
+                                <div class="flex-shrink-0 h-10 w-10 rounded-full bg-indigo-100 flex items-center justify-center text-indigo-600">
+                                    <i class="fas fa-envelope"></i>
+                                </div>
+                                <div class="ml-4">
+                                    <h4 class="text-sm font-medium text-gray-900">Email</h4>
+                                    <p class="text-sm text-gray-500">info@bukidnon.gov.ph</p>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="mt-8">
+                            <h4 class="text-sm font-medium text-gray-900 mb-3">Follow Us</h4>
+                            <div class="flex space-x-4">
+                                <a href="#" class="h-10 w-10 rounded-full bg-gray-100 flex items-center justify-center text-gray-600 hover:bg-indigo-100 hover:text-indigo-600 transition duration-150 ease-in-out">
+                                    <i class="fab fa-facebook-f"></i>
+                                </a>
+                                <a href="#" class="h-10 w-10 rounded-full bg-gray-100 flex items-center justify-center text-gray-600 hover:bg-indigo-100 hover:text-indigo-600 transition duration-150 ease-in-out">
+                                    <i class="fab fa-twitter"></i>
+                                </a>
+                                <a href="#" class="h-10 w-10 rounded-full bg-gray-100 flex items-center justify-center text-gray-600 hover:bg-indigo-100 hover:text-indigo-600 transition duration-150 ease-in-out">
+                                    <i class="fab fa-instagram"></i>
+                                </a>
+                                <a href="#" class="h-10 w-10 rounded-full bg-gray-100 flex items-center justify-center text-gray-600 hover:bg-indigo-100 hover:text-indigo-600 transition duration-150 ease-in-out">
+                                    <i class="fab fa-youtube"></i>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+        <!-- Footer -->
+        <footer class="bg-gray-800 text-white py-12">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="grid md:grid-cols-4 gap-8">
+                    <div>
+                        <h3 class="text-lg font-semibold mb-4">Discover Bukidnon</h3>
+                        <p class="text-gray-300 text-sm">
+                            Explore the highland paradise of Bukidnon with its rich culture, breathtaking landscapes, and warm hospitality.
+                        </p>
+                    </div>
+                    <div>
+                        <h3 class="text-lg font-semibold mb-4">Quick Links</h3>
+                        <ul class="space-y-2">
+                            <li><a href="#home" class="text-gray-300 hover:text-white text-sm transition duration-150 ease-in-out">Home</a></li>
+                            <li><a href="#about" class="text-gray-300 hover:text-white text-sm transition duration-150 ease-in-out">About Bukidnon</a></li>
+                            <li><a href="#attractions" class="text-gray-300 hover:text-white text-sm transition duration-150 ease-in-out">Tourist Attractions</a></li>
+                            <li><a href="#festivals" class="text-gray-300 hover:text-white text-sm transition duration-150 ease-in-out">Festivals</a></li>
+                        </ul>
+                    </div>
+                    <div>
+                        <h3 class="text-lg font-semibold mb-4">Resources</h3>
+                        <ul class="space-y-2">
+                            <li><a href="#" class="text-gray-300 hover:text-white text-sm transition duration-150 ease-in-out">Travel Guide</a></li>
+                            <li><a href="#" class="text-gray-300 hover:text-white text-sm transition duration-150 ease-in-out">Accommodations</a></li>
+                            <li><a href="#" class="text-gray-300 hover:text-white text-sm transition duration-150 ease-in-out">Transportation</a></li>
+                            <li><a href="#" class="text-gray-300 hover:text-white text-sm transition duration-150 ease-in-out">Events Calendar</a></li>
+                        </ul>
+                    </div>
+                    <div>
+                        <h3 class="text-lg font-semibold mb-4">Newsletter</h3>
+                        <p class="text-gray-300 text-sm mb-4">
+                            Subscribe to our newsletter for updates on events and attractions in Bukidnon.
+                        </p>
+                        <form class="flex">
+                            <input type="email" placeholder="Your email" class="px-4 py-2 rounded-l-md focus:outline-none text-gray-800 w-full">
+                            <button type="submit" class="bg-indigo-600 hover:bg-indigo-700 px-4 py-2 rounded-r-md transition duration-150 ease-in-out">
+                                <i class="fas fa-paper-plane"></i>
+                            </button>
+                        </form>
+                    </div>
+                </div>
+                <div class="border-t border-gray-700 mt-12 pt-8 flex flex-col md:flex-row justify-between items-center">
+                    <p class="text-gray-300 text-sm">
+                        &copy; 2023 Discover Bukidnon. All rights reserved.
+                    </p>
+                    <div class="flex space-x-6 mt-4 md:mt-0">
+                        <a href="#" class="text-gray-300 hover:text-white transition duration-150 ease-in-out">
+                            <span class="sr-only">Privacy Policy</span>
+                            Privacy
+                        </a>
+                        <a href="#" class="text-gray-300 hover:text-white transition duration-150 ease-in-out">
+                            <span class="sr-only">Terms of Service</span>
+                            Terms
+                        </a>
+                        <a href="#" class="text-gray-300 hover:text-white transition duration-150 ease-in-out">
+                            <span class="sr-only">Contact Us</span>
+                            Contact
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </footer>
+    </div>
+    
+    <script>
+        // Simple user database using localStorage
+        const userDB = {
+            init: function() {
+                if (!localStorage.getItem('users')) {
+                    localStorage.setItem('users', JSON.stringify({}));
+                }
+            },
+            
+            addUser: function(username, password) {
+                const users = JSON.parse(localStorage.getItem('users'));
+                users[username] = password;
+                localStorage.setItem('users', JSON.stringify(users));
+            },
+            
+            validateUser: function(username, password) {
+                const users = JSON.parse(localStorage.getItem('users'));
+                return users[username] === password;
+            }
+        };
+        
+        // Initialize user database
+        userDB.init();
+        
+        // DOM Elements
+        const authPage = document.getElementById('auth-page');
+        const mainContent = document.getElementById('main-content');
+        const loginForm = document.getElementById('login-form');
+        const registerForm = document.getElementById('register-form');
+        const loginTab = document.getElementById('login-tab');
+        const registerTab = document.getElementById('register-tab');
+        const logoutBtn = document.getElementById('logout-btn');
+        const mobileLogoutBtn = document.getElementById('mobile-logout-btn');
+        const mobileMenuBtn = document.getElementById('mobile-menu-btn');
+        const mobileMenu = document.getElementById('mobile-menu');
+        
+        // Tab switching between login and register
+        loginTab.addEventListener('click', function(e) {
+            e.preventDefault();
+            loginForm.classList.remove('hidden');
+            registerForm.classList.add('hidden');
+            loginTab.classList.remove('bg-gray-200', 'text-gray-700');
+            loginTab.classList.add('bg-indigo-600', 'text-white');
+            registerTab.classList.remove('bg-indigo-600', 'text-white');
+            registerTab.classList.add('bg-gray-200', 'text-gray-700');
+        });
+        
+        registerTab.addEventListener('click', function(e) {
+            e.preventDefault();
+            registerForm.classList.remove('hidden');
+            loginForm.classList.add('hidden');
+            registerTab.classList.remove('bg-gray-200', 'text-gray-700');
+            registerTab.classList.add('bg-indigo-600', 'text-white');
+            loginTab.classList.remove('bg-indigo-600', 'text-white');
+            loginTab.classList.add('bg-gray-200', 'text-gray-700');
+        });
+        
+        // Login form submission
+        loginForm.addEventListener('submit', function(e) {
+            e.preventDefault();
+            const username = document.getElementById('login-username').value;
+            const password = document.getElementById('login-password').value;
+            
+            if (userDB.validateUser(username, password)) {
+                // Successful login
+                authPage.classList.add('hidden');
+                mainContent.classList.remove('hidden');
+                initScrollAnimations();
+            } else {
+                alert('Invalid username or password');
+            }
+        });
+        
+        // Register form submission
+        registerForm.addEventListener('submit', function(e) {
+            e.preventDefault();
+            const username = document.getElementById('register-username').value;
+            const password = document.getElementById('register-password').value;
+            const confirmPassword = document.getElementById('confirm-password').value;
+            
+            if (password !== confirmPassword) {
+                alert('Passwords do not match');
+                return;
+            }
+            
+            userDB.addUser(username, password);
+            alert('Registration successful! Please login.');
+            
+            // Switch to login tab
+            loginTab.click();
+            document.getElementById('login-username').value = username;
+            document.getElementById('login-password').value = '';
+        });
+        
+        // Logout functionality
+        function logout() {
+            authPage.classList.remove('hidden');
+            mainContent.classList.add('hidden');
+            document.getElementById('login-username').value = '';
+            document.getElementById('login-password').value = '';
+        }
+        
+        logoutBtn.addEventListener('click', logout);
+        mobileLogoutBtn.addEventListener('click', logout);
+        
+        // Mobile menu toggle
+        mobileMenuBtn.addEventListener('click', function() {
+            const expanded = mobileMenuBtn.getAttribute('aria-expanded') === 'true';
+            mobileMenuBtn.setAttribute('aria-expanded', !expanded);
+            mobileMenu.classList.toggle('hidden');
+            
+            // Toggle between menu and close icons
+            const menuIcon = mobileMenuBtn.querySelector('svg:not(.hidden)');
+            const closeIcon = mobileMenuBtn.querySelector('svg.hidden');
+            menuIcon.classList.add('hidden');
+            closeIcon.classList.remove('hidden');
+            
+            if (expanded) {
+                setTimeout(() => {
+                    menuIcon.classList.remove('hidden');
+                    closeIcon.classList.add('hidden');
+                }, 300);
+            }
+        });
+        
+        // Smooth scrolling for anchor links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function(e) {
+                e.preventDefault();
+                
+                // Close mobile menu if open
+                if (!mobileMenu.classList.contains('hidden')) {
+                    mobileMenuBtn.click();
+                }
+                
+                const targetId = this.getAttribute('href');
+                const targetElement = document.querySelector(targetId);
+                
+                if (targetElement) {
+                    window.scrollTo({
+                        top: targetElement.offsetTop - 80,
+                        behavior: 'smooth'
+                    });
+                }
+            });
+        });
+        
+        // Scroll animations
+        function initScrollAnimations() {
+            const scrollElements = document.querySelectorAll('[data-scroll]');
+            
+            const elementInView = (el) => {
+                const elementTop = el.getBoundingClientRect().top;
+                return (
+                    elementTop <= (window.innerHeight || document.documentElement.clientHeight) / 1.2
+                );
+            };
+            
+            const displayScrollElement = (element) => {
+                element.classList.add('is-visible');
+            };
+            
+            const handleScrollAnimation = () => {
+                scrollElements.forEach((el) => {
+                    if (elementInView(el)) {
+                        displayScrollElement(el);
+                    }
+                });
+            };
+            
+            // Initialize elements that are already in view
+            scrollElements.forEach((el) => {
+                if (elementInView(el)) {
+                    displayScrollElement(el);
+                }
+            });
+            
+            // Listen for scroll events
+            window.addEventListener('scroll', () => {
+                handleScrollAnimation();
+            });
+        }
+        
+        // Check if user is already logged in (for page refresh)
+        if (localStorage.getItem('currentUser')) {
+            authPage.classList.add('hidden');
+            mainContent.classList.remove('hidden');
+            initScrollAnimations();
+        }
+    </script>
+</body>
+</html>
